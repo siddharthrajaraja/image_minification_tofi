@@ -9,6 +9,7 @@ amqp.connect('amqp://localhost',(err0,connection)=>{
         var queue='imageMinify1'
         
         channel.assertQueue(queue,{durable:true})
+        channel.prefetch(1);
         channel.consume(queue,async(message)=>{
             
         var data=await JSON.parse(message.content.toString())
