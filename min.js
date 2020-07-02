@@ -83,7 +83,7 @@ const rename = async function (uploads, originals) {
 var imgProcess = function (name) {
     //console.log(path);
 
-    const filename = await paths.parse(filename).name;
+    const filename = await paths.parse(name).name;
 
     // get current file extension
     const ext = await paths.parse(filename).ext;
