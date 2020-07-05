@@ -3,9 +3,9 @@ const util = require('util');
 var sharp = require('sharp');
 const fs = require('fs');
 const paths = require('path');
-const {
-    exit
-} = require('process');
+// const {
+//     exit
+// } = require('process');
 const copy = util.promisify(fs.copyFile);
 const del = util.promisify(fs.unlink);
 
@@ -33,7 +33,7 @@ const compress = async function (path, name, ext, compressed) {
     await pipeline
         .webp()
         .toFile(`${compressed}.webp`, function (err) { //note the directory needs to exist else will throw err
-            if (err) console.log(err, '\n', `Illegal file : ${name}.${ext}`, '\n')
+            if (err) console.log(err, '\n', `Illegal file : ${name}${ext}`, '\n')
         });
 
     // debugger;
@@ -69,7 +69,7 @@ const rename = async function (uploads, originals) {
 
     // Move file ./uploads/img.* to ./originals/img.*
 
-    console.log(uploads, originals);
+    // console.log(uploads, originals);
     await copy(uploads, originals);
     //await timeout(1000);
     await del(uploads);
@@ -83,26 +83,24 @@ const rename = async function (uploads, originals) {
 const imgProcess = async function (path) {
     const filename = await paths.basename(path);
     const name = await paths.parse(filename).name;
-
-    // get current file extension
     const ext = await paths.parse(filename).ext;
-    console.log('file path:', path);
-    console.log('file name:', name);
-    console.log('file extension:', ext);
-    console.log('fileame:' , filename);
 
-    // debugger;
-
+    // console.log('file path:', path);
+    // console.log('file name:', name);
+    // console.log('file extension:', ext);
+    // console.log('fileame:' , filename);
 
     (async () => {
             var uploads = `../uploads/${name}${ext}`;
             var originals = `../originals/${name}${ext}`;
             var compressed = `../compressed/${name}`;
             await compress(path, name, ext, compressed).then(done => {
-                console.log("Compressed processed!!")
-                rename(uploads, originals).then(done => {
-                    console.log("File Moved")
-                });
+                console.log("Compression processed!!")
+                    // (async () => {
+                        rename(uploads, originals).then(done => {
+                            console.log("File Moved")
+                        })
+                    // })()
             });
 
 
