@@ -6,6 +6,7 @@ const bodyParser=require('body-parser')
 require('./rabbitMQ/producer')
 const jsonParser=bodyParser.json()
 
+
 app.use(cors())
 app.use(bodyParser.json())
 

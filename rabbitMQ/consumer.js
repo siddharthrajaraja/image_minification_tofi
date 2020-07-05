@@ -1,5 +1,5 @@
 var amqp=require('amqplib/callback_api')
-
+var {imgProcess}=require('../min');
 
 amqp.connect('amqp://localhost',(err0,connection)=>{
     if(err0)throw err0;
@@ -7,7 +7,7 @@ amqp.connect('amqp://localhost',(err0,connection)=>{
     connection.createChannel((err1,channel)=>{
         if(err1)  throw err1;
         var queue='imageMinify1'
-        
+        var filePath = `../uploads`;
         channel.assertQueue(queue,{durable:true})
         channel.prefetch(1);
         channel.consume(queue,async(message)=>{
@@ -16,8 +16,7 @@ amqp.connect('amqp://localhost',(err0,connection)=>{
             
             
         await console.log("Received Message :",data[0])
-            
-            // Here you need to specify the image minification script!!
+        imgProcess(`${filePath}/${data[0].fileName}`);
 
         },{
             noAck:true // If message is unsuccesfull then Ack is not received and message is requeued back to RabbitMQ

@@ -3,9 +3,9 @@ const util = require('util');
 var sharp = require('sharp');
 const fs = require('fs');
 const paths = require('path');
-// const {
-//     exit
-// } = require('process');
+const {
+    exit
+} = require('process');
 const copy = util.promisify(fs.copyFile);
 const del = util.promisify(fs.unlink);
 
@@ -21,13 +21,11 @@ const del = util.promisify(fs.unlink);
 
 // });
 
-// function timeout(ms) {
-//     return new Promise(resolve => setTimeout(resolve, ms));
-// }
+function timeout(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-const compress = async function (path, ext, compressed) {
-
-
+const compress = async function (path, name, ext, compressed) {
     const pipeline = await sharp(path).rotate().resize({
         width: 1500
     }).withMetadata();
@@ -80,27 +78,29 @@ const rename = async function (uploads, originals) {
 
 
 
-var imgProcess = function (name) {
-    //console.log(path);
-
-    const filename = await paths.parse(name).name;
+// watcher.on('add', async function (path) {
+//console.log(path);
+const imgProcess = async function (path) {
+    const filename = await paths.basename(path);
+    const name = await paths.parse(filename).name;
 
     // get current file extension
-    const ext = await paths.parse(name).ext;
-    // console.log('file path:', path);
-    //console.log('file name:', name);
-    // console.log('file extension:', ext);
+    const ext = await paths.parse(filename).ext;
+    console.log('file path:', path);
+    console.log('file name:', name);
+    console.log('file extension:', ext);
+    console.log('fileame:' , filename);
 
     // debugger;
 
 
     (async () => {
-            var path = `./uploads/${name}`;
-            var originals = `./originals/${name}`;
-            var compressed = `compressed/${filename}`;
-            await compress(path, ext, compressed).then(done => {
+            var uploads = `../uploads/${name}${ext}`;
+            var originals = `../originals/${name}${ext}`;
+            var compressed = `../compressed/${name}`;
+            await compress(path, name, ext, compressed).then(done => {
                 console.log("Compressed processed!!")
-                rename(path, originals).then(done => {
+                rename(uploads, originals).then(done => {
                     console.log("File Moved")
                 });
             });
@@ -109,10 +109,8 @@ var imgProcess = function (name) {
         }
 
     )();
-
-
-}
+};
 
 module.exports = {
-    imgProcess:  imgProcess
+    imgProcess: imgProcess
 }
