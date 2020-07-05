@@ -86,7 +86,7 @@ var imgProcess = function (name) {
     const filename = await paths.parse(name).name;
 
     // get current file extension
-    const ext = await paths.parse(filename).ext;
+    const ext = await paths.parse(name).ext;
     // console.log('file path:', path);
     //console.log('file name:', name);
     // console.log('file extension:', ext);
