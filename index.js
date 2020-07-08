@@ -14,7 +14,6 @@ var {producer}=require('./rabbitMQ/producer')
 
 app.post('/postRMQ',jsonParser,async(req,res)=>{
     console.log("Result :",producer(req.body))
-    
     res.json({flag:"OK"})
 
 });

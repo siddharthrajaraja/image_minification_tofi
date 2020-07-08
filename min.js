@@ -80,7 +80,7 @@ const rename = async function (uploads, originals) {
 
 // watcher.on('add', async function (path) {
 //console.log(path);
-const imgProcess = async function (path) {
+const imgProcess = async function (path,storageLocation) {
     const filename = await paths.basename(path);
     const name = await paths.parse(filename).name;
     const ext = await paths.parse(filename).ext;
@@ -91,15 +91,16 @@ const imgProcess = async function (path) {
     // console.log('fileame:' , filename);
 
     (async () => {
-            var uploads = `../uploads/${name}${ext}`;
-            var originals = `../originals/${name}${ext}`;
-            var compressed = `../compressed/${name}`;
+            // console.log(path);
+            // var uploads = `../uploads/${name}${ext}`;
+            // var originals = `../originals/${name}${ext}`;
+             var compressed = `${storageLocation}/${name}`;
             await compress(path, name, ext, compressed).then(done => {
                 console.log("Compression processed!!")
                     // (async () => {
-                        rename(uploads, originals).then(done => {
-                            console.log("File Moved")
-                        })
+                        //rename(path, originals).then(done => {
+                         //   console.log("File Moved")
+                        //})
                     // })()
             });
 
